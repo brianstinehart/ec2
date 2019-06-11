@@ -20,6 +20,9 @@
 - name: FIND AZ ZONE FOR REGION {{ ec2_region }}
   aws_az_facts:
     region: "{{ ec2_region }}"
+    # aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+    # aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+    # validate_certs: no
   register: az_names
 
 - name: SET AZ ZONE TO FIRST AVAILABLE
