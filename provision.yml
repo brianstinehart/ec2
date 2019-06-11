@@ -16,7 +16,14 @@
 
 - name: Configure Active Directory Domain Controller
   hosts: windows_domain_controllers
-  gather_facts: True
+  gather_facts: true
+  tasks:
+  - shell: exit 1
+    register: task_result
+    until: task_result.rc == 0
+    retries: 10
+    delay: 1
+    ignore_errors: yes
   vars_files:
     - [ 'vars/custom.yml', 'vars/main.yml' ]
   tags:
