@@ -3,11 +3,11 @@
   command: python -c 'import boto3; print(boto3.__version__)'
   register: py_cmd
 
-# - name: make sure we are running correct boto version
-#   assert:
-#     that:
-#       - py_cmd.stdout is version('1.7', operator='ge')
-#     msg: "boto3 >= 1.7 is required."
+- name: make sure we are running correct boto version
+  assert:
+    that:
+      - py_cmd.stdout is version('1.7', operator='ge')
+    msg: "boto3 >= 1.7 is required."
 
 - name: check for underscores in workshop name
   fail:
@@ -20,8 +20,6 @@
 - name: FIND AZ ZONE FOR REGION {{ ec2_region }}
   aws_az_facts:
     region: "{{ ec2_region }}"
-    aws_access_key: AKIAIVFBR6NBYG5S6OIQ
-    aws_secret_key: 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
   register: az_names
 
 - name: SET AZ ZONE TO FIRST AVAILABLE
