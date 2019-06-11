@@ -83,7 +83,7 @@ gitlab_smtp_enable: "false"
 ######################## EC2 INFO ########################
 ##########################################################
 
-ec2_region: "us-east-1"
+ec2_region: "ap-southeast-2"
 
 # If this is defined, create a dns entries in the route53 zone
 #public_dns_zone: "labs.ansibleworkshop.com"

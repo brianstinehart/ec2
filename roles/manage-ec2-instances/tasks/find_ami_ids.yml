@@ -38,7 +38,7 @@
 - name: set ami ids
   set_fact:
     ec2_ami_ids:
-      rhel7: "{{ rhel7_ami_find.images[-1].image_id | default('') }}"
+      # rhel7: "{{ rhel7_ami_find.images[-1].image_id | default('') }}"
       win2016_core: "{{ win2016_core_ami_find.images[-1].image_id | default('') }}"
       win2016_full: "{{ win2016_full_ami_find.images[-1].image_id | default('') }}"
       win2019_core: "{{ win2019_core_ami_find.images[-1].image_id | default('') }}"
