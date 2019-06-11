@@ -9,16 +9,16 @@
     path: "{{ playbook_dir }}/workshops/{{ name_prefix }}"
     state: directory
 
-- name: Check that the provided license exists
-  stat:
-    path: "{{ playbook_dir }}/tower_license.json"
-  register: stat_result
-
-- fail:
-    msg: "You need a license located at {{ playbook_dir }}/tower_license.json or to provide a license in variable 'tower_license'"
-  when:
-    - not stat_result.stat.exists
-    - tower_license is undefined
+# - name: Check that the provided license exists
+#   stat:
+#     path: "{{ playbook_dir }}/tower_license.json"
+#   register: stat_result
+#
+# - fail:
+#     msg: "You need a license located at {{ playbook_dir }}/tower_license.json or to provide a license in variable 'tower_license'"
+#   when:
+#     - not stat_result.stat.exists
+#     - tower_license is undefined
 
 - name: Ensure eula is accepted if posting license
   lineinfile:
