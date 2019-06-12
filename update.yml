@@ -71,7 +71,7 @@
 #     - ansible-tower
 #
 - name: Configure Windows Workstation
-  hosts: localhost
+  hosts: windows_workstations
   gather_facts: True
   vars_files:
     - [ 'vars/custom.yml', 'vars/main.yml' ]
