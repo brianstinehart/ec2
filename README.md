@@ -1,16 +1,16 @@
-![skylight](docs/lab_guide/images/skylight_logo_color.png)
+![skylight](docs/lab_guide/images/Ansible_logo.svg.png)
 
-# Ansible Windows Workshop
+# Ansible EC2 Deployment
 
-These ansible playbooks provision a lab on AWS for use in delivering a workshop focused on Windows.  This provisions the following:
+These ansible playbooks provision VMs on AWS focused on Windows.  This provisions the following:
 
 * Base Infrastructure
   * A Microsoft Active Directory Server
-  * A Gitlab server
-* Per-Student Infrastructure
-  * An Ansible Tower control node
   * A Windows Workstation for interacting with the environment
-  * A Windows Host(s) for running playbooks against
+* Optional Additions
+  * An Ansible Tower control node
+  * A Gitlab server
+  * Windows Host(s) for running playbooks against
 
 The client pre-requisite to use this workshop is simply to have an RDP client which can connect to the Windows Workstation.  If RDP is not allowed through a corporate firewall, a HTML5 RDP client is also running on each Workstation.  As the HTML5 client is fairly slow, it is recommended that students use normal RDP if at all possible.  All other activities will take place from that Workstation.  The Workstation has Visual Studio Code, Chrome, Putty, and Git for Windows.  
 
@@ -33,7 +33,7 @@ Requirements for running the provisioner will vary based upon your environment a
 
 You will need to setup your AWS configuration and Credentials.  Note that a standard AWS account is limited to 20 ec2 instances, so update your quota in advance.  Also note that each student gets 3 machines.  Make certain your VPC is large enough.  
 
-You can set it up like this. 
+You can set it up like this.
 
 ~/.aws/config
 ```
@@ -56,7 +56,7 @@ Beyond that, the main thing that needs to be edited is the *vars/main.yml* file 
 For each workshop it is recommended that you utlilize the custom.yml to maintain the majority of the nonchanging settings, and then you can create a separate vars file (to be included in via extravars) with just the variables you need for the individual workshop.
 
 ```
-## Example extra vars file 
+## Example extra vars file
 instance_loc: aws
 name_prefix: "skylight"
 user_count: 1
