@@ -1,28 +1,28 @@
 ---
-# - name: Provision Instances
-#   hosts: localhost
-#   gather_facts: False
-#   vars_files:
-#     - [ 'vars/custom.yml', 'vars/main.yml' ]
-#   tags:
-#     - manage-instances
-#   vars:
-#     teardown: false
-#   tasks:
-#   - include_role:
-#       name: "check_setup"
-#   - include_role:
-#       name: "manage-{{ instance_loc }}-instances"
-#
-# - name: Configure Active Directory Domain Controller
-#   hosts: windows_domain_controllers
-#   gather_facts: False
-#   vars_files:
-#     - [ 'vars/custom.yml', 'vars/main.yml' ]
-#   tags:
-#     - windows-ad-controller
-#   roles:
-#     - windows-ad-controller
+- name: Provision Instances
+  hosts: localhost
+  gather_facts: False
+  vars_files:
+    - [ 'vars/custom.yml', 'vars/main.yml' ]
+  tags:
+    - manage-instances
+  vars:
+    teardown: false
+  tasks:
+  - include_role:
+      name: "check_setup"
+  - include_role:
+      name: "manage-{{ instance_loc }}-instances"
+
+- name: Configure Active Directory Domain Controller
+  hosts: windows_domain_controllers
+  gather_facts: False
+  vars_files:
+    - [ 'vars/custom.yml', 'vars/main.yml' ]
+  tags:
+    - windows-ad-controller
+  roles:
+    - windows-ad-controller
 #
 # - name: Configure Windows Servers
 #   hosts: windows
