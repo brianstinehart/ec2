@@ -1,4 +1,4 @@
-![skylight](docs/lab_guide/images/Ansible_logo.svg.png)![skylight](docs/lab_guide/images/Amazon_Web_Services_logo_AWS.png)
+![ec2](docs/lab_guide/images/Ansible_logo.svg.png)![ec2](docs/lab_guide/images/Amazon_Web_Services_logo_AWS.png)
 
 # Ansible EC2 Deployment
 
