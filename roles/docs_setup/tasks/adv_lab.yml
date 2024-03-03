@@ -1,3 +1,4 @@
+---
 - name: Create Advanced directory on server
   file:
     path: /usr/share/nginx/html/advanced/
@@ -15,10 +16,10 @@
     chdir: /usr/share/nginx/html/advanced/
   with_items:
     - index
-    - 01_conditionals_lab
-    - 02_jinja_lab
-    - 03_filtering_lab
-#    - 04_vault_lab
-#    - 05_containers_lab
-#    - 04_api_lab
+    - "01_conditionals_lab"
+    - "02_jinja_lab"
+    - "03_filtering_lab"
+  #    - 04_vault_lab
+  #    - 05_containers_lab
+  #    - 04_api_lab
   when: copycontent.changed

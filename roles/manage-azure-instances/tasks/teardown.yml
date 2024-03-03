@@ -1,10 +1,10 @@
 ---
 - name: Set resource facts
   set_fact:
-    azure_resource_group:  "{{ name_prefix }}-resource"
+    azure_resource_group: "{{ name_prefix }}-resource"
     azure_storage_account: "{{ (name_prefix + 'storage') | lower | regex_replace('[^0-9a-z]+', '') }}"
     azure_virtual_network: "{{ name_prefix }}-network"
-    azure_virtual_subnet:  "{{ (name_prefix + 'subnet')  | lower | regex_replace('[^0-9a-z]+', '') }}"
+    azure_virtual_subnet: "{{ (name_prefix + 'subnet')  | lower | regex_replace('[^0-9a-z]+', '') }}"
 
 ################### Destroy Instances ###################
 
@@ -16,7 +16,7 @@
     tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix }}-dc"
-    started: False
+    started: false
     state: absent
   with_sequence: count=1
   register: dc_jobs
@@ -31,7 +31,7 @@
     tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix }}-gitlab"
-    started: False
+    started: false
     state: absent
   with_sequence: count=1
   register: gitlab_jobs
@@ -46,7 +46,7 @@
     tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix }}-docs"
-    started: False
+    started: false
     state: absent
   with_sequence: count=1
   register: docs_jobs
@@ -61,7 +61,7 @@
     tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-s' + item + '-w1'}}"
-    started: False
+    started: false
     state: absent
   with_sequence: count={{ user_count }}
   register: windows1_jobs
@@ -76,7 +76,7 @@
     tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-s' + item + '-wk'}}"
-    started: False
+    started: false
     state: absent
   with_sequence: count={{ user_count }}
   register: workstation_jobs
@@ -91,7 +91,7 @@
     tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-s' + item + '-tower'}}"
-    started: False
+    started: false
     state: absent
   with_sequence: count={{ user_count }}
   register: tower_jobs
@@ -106,7 +106,7 @@
   until: instances.finished
   retries: 600
   with_items: "{{ tower_jobs.results + gitlab_jobs.results + docs_jobs.results + windows1_jobs.results + workstation_jobs.results}}"
-  ignore_errors: yes
+  ignore_errors: true
 
 ################### Remove Network Interfaces ###################
 
@@ -117,10 +117,10 @@
     subscription_id: "{{ azure_subscription_id }}"
     tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ name_prefix + '-s' + item + '-w101'}}" 
+    name: "{{ name_prefix + '-s' + item + '-w101'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Workstation | Delete network interface
   azure_rm_networkinterface:
@@ -132,7 +132,7 @@
     name: "{{ name_prefix + '-s' + item + '-wk01'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Tower | Delete network interface
   azure_rm_networkinterface:
@@ -144,7 +144,7 @@
     name: "{{ name_prefix + '-s' + item + '-tower01'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Gitlab | Delete network interface
   azure_rm_networkinterface:
@@ -155,7 +155,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-gitlab01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Docs | Delete network interface
   azure_rm_networkinterface:
@@ -166,7 +166,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-docs01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | DC | Delete network interface
   azure_rm_networkinterface:
@@ -177,7 +177,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-dc01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 ################### Remove Security Groups ###################
 
@@ -191,7 +191,7 @@
     name: "{{ name_prefix + '-s' + item + '-w101'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Workstation | Delete Security Group
   azure_rm_securitygroup:
@@ -203,7 +203,7 @@
     name: "{{ name_prefix + '-s' + item + '-wk01'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Tower | Delete Security Group
   azure_rm_securitygroup:
@@ -215,7 +215,7 @@
     name: "{{ name_prefix + '-s' + item + '-tower01'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Gitlab | Delete Security Group
   azure_rm_securitygroup:
@@ -226,7 +226,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-gitlab01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Docs | Delete Security Group
   azure_rm_securitygroup:
@@ -237,7 +237,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-docs01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | DC | Delete Security Group
   azure_rm_securitygroup:
@@ -248,7 +248,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-dc01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 ################### Remove Public IP Addresses ###################
 
@@ -262,7 +262,7 @@
     name: "{{ name_prefix + '-s' + item + '-w101'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Workstation | Delete Public IP Addresses
   azure_rm_publicipaddress:
@@ -274,7 +274,7 @@
     name: "{{ name_prefix + '-s' + item + '-wk01'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Tower | Delete Public IP Addresses
   azure_rm_publicipaddress:
@@ -286,7 +286,7 @@
     name: "{{ name_prefix + '-s' + item + '-tower01'}}"
     state: absent
   with_sequence: count={{ user_count }}
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Gitlab | Delete Public IP Addresses
   azure_rm_publicipaddress:
@@ -297,7 +297,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-gitlab01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Docs | Delete Public IP Addresses
   azure_rm_publicipaddress:
@@ -308,7 +308,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-docs01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | DC | Delete Public IP Addresses
   azure_rm_publicipaddress:
@@ -319,7 +319,7 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ name_prefix + '-dc01'}}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 ################### Remove Subnets ###################
 
@@ -328,46 +328,45 @@
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
-    tenant: "{{ azure_tenant }}"    
-    resource_group: "{{ azure_resource_group }}"    
+    tenant: "{{ azure_tenant }}"
+    resource_group: "{{ azure_resource_group }}"
     name: "{{ azure_virtual_subnet }}"
     virtual_network_name: "{{ azure_virtual_network }}"
-    address_prefix_cidr: "{{ ptr_zone_cidr }}"     
+    address_prefix_cidr: "{{ ptr_zone_cidr }}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Destroy virtual network
   azure_rm_virtualnetwork:
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
-    tenant: "{{ azure_tenant }}"    
-    resource_group: "{{ azure_resource_group }}"  
-    name: "{{ azure_virtual_network }}" 
+    tenant: "{{ azure_tenant }}"
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ azure_virtual_network }}"
     address_prefixes_cidr:
-        - "{{ ptr_zone_cidr }}"
+      - "{{ ptr_zone_cidr }}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Destroy storage account
   azure_rm_storageaccount:
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
-    tenant: "{{ azure_tenant }}"    
+    tenant: "{{ azure_tenant }}"
     resource_group: "{{ azure_resource_group }}"
     name: "{{ azure_storage_account }}"
     account_type: "{{ azure_storage_account_type }}"
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Azure | Destroy resource group
   azure_rm_resourcegroup:
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
-    tenant: "{{ azure_tenant }}"  
+    tenant: "{{ azure_tenant }}"
     name: "{{ azure_resource_group }}"
     location: "{{ azure_location }}"
     state: absent
-

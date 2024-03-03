@@ -1,11 +1,10 @@
 ---
 - name: Set resource facts
   set_fact:
-    azure_resource_group:  "{{ name_prefix }}-resource"
+    azure_resource_group: "{{ name_prefix }}-resource"
     azure_storage_account: "{{ (name_prefix + 'storage') | lower | regex_replace('[^0-9a-z]+', '') }}"
     azure_virtual_network: "{{ name_prefix }}-network"
-    azure_virtual_subnet:  "{{ (name_prefix + 'subnet')  | lower | regex_replace('[^0-9a-z]+', '') }}"
-
+    azure_virtual_subnet: "{{ (name_prefix + 'subnet')  | lower | regex_replace('[^0-9a-z]+', '') }}"
 
 # Create a resource group
 - name: Azure | Create a resource group
@@ -37,13 +36,13 @@
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
     tenant: "{{ azure_tenant }}"
-    resource_group: "{{ azure_resource_group }}"  
+    resource_group: "{{ azure_resource_group }}"
     name: "{{ azure_virtual_network }}"
     address_prefixes_cidr:
-        - "{{ ptr_zone_cidr }}"
+      - "{{ ptr_zone_cidr }}"
     dns_servers:
-        - "8.8.8.8"
-  register: virtual_network_facts    
+      - 8.8.8.8
+  register: virtual_network_facts
 
 # Create a subnet and associate with the virtual network
 - name: Create a subnet
@@ -70,18 +69,18 @@
     storage_account_name: "{{ azure_storage_account }}"
     admin_username: "{{ azure_admin_user }}"
     admin_password: "{{ azure_admin_pass }}"
-    started: True
+    started: true
     state: present
     os_type: Windows
     public_ip_allocation_method: Dynamic
     virtual_network_name: "{{ azure_virtual_network }}"
     open_ports:
-      - 5986  # WinRM secure
+      - 5986 # WinRM secure
       - 5985
-      - 3389  # RDP
+      - 3389 # RDP
     tags:
       Name: "{{ name_prefix }}-dc"
-      DNSName: "windc"
+      DNSName: windc
       App: AnsibleWorkshop
     image:
       publisher: "{{ azure_win_publisher }}"
@@ -105,7 +104,7 @@
     storage_account_name: "{{ azure_storage_account }}"
     admin_username: "{{ azure_admin_user }}"
     admin_password: "{{ azure_admin_pass }}"
-    started: True
+    started: true
     os_type: Windows
     state: present
     public_ip_allocation_method: Dynamic
@@ -114,10 +113,10 @@
     open_ports:
       - 80
       - 8080
-      - 443 
-      - 5986  # WinRM secure
-      - 5985  # WinRM
-      - 3389  # RDP
+      - 443
+      - 5986 # WinRM secure
+      - 5985 # WinRM
+      - 3389 # RDP
     tags:
       Name: "{{ name_prefix + '-s' + item + '-w1'}}"
       DNSName: "{{ 's' + item + '-w1'}}"
@@ -146,16 +145,16 @@
     storage_account_name: "{{ azure_storage_account }}"
     admin_username: "{{ azure_admin_user }}"
     admin_password: "{{ azure_admin_pass }}"
-    started: True
+    started: true
     os_type: Windows
     state: present
     public_ip_allocation_method: Dynamic
     virtual_network_name: "{{ azure_virtual_network }}"
     subnet_name: "{{ azure_virtual_subnet }}"
     open_ports:
-      - 5986  # WinRM secure
-      - 5985  # WinRM
-      - 3389  # RDP
+      - 5986 # WinRM secure
+      - 5985 # WinRM
+      - 3389 # RDP
     tags:
       Name: "{{ name_prefix + '-s' + item + '-wk'}}"
       DNSName: "{{ 's' + item + '-win1'}}"
@@ -172,7 +171,7 @@
   async: 7200
   poll: 0
 
-- name: Launch Tower Instance  
+- name: Launch Tower Instance
   azure_rm_virtualmachine:
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_secret }}"
@@ -184,7 +183,7 @@
     storage_account_name: "{{ azure_storage_account }}"
     admin_username: "{{ azure_admin_user }}"
     admin_password: "{{ azure_admin_pass }}"
-    started: True
+    started: true
     state: present
     public_ip_allocation_method: Dynamic
     virtual_network_name: "{{ azure_virtual_network }}"
@@ -221,7 +220,7 @@
     storage_account_name: "{{ azure_storage_account }}"
     admin_username: "{{ azure_admin_user }}"
     admin_password: "{{ azure_admin_pass }}"
-    started: True
+    started: true
     state: present
     public_ip_allocation_method: Dynamic
     virtual_network_name: "{{ azure_virtual_network }}"
@@ -233,7 +232,7 @@
       - 443
     tags:
       Name: "{{ name_prefix + '-gitlab'}}"
-      DNSName: "gitlab"
+      DNSName: gitlab
       App: AnsibleWorkshop
     image:
       publisher: "{{ azure_rhel_publisher }}"
@@ -257,7 +256,7 @@
     storage_account_name: "{{ azure_storage_account }}"
     admin_username: "{{ azure_admin_user }}"
     admin_password: "{{ azure_admin_pass }}"
-    started: True
+    started: true
     state: present
     public_ip_allocation_method: Dynamic
     virtual_network_name: "{{ azure_virtual_network }}"
@@ -269,7 +268,7 @@
       - 443
     tags:
       Name: "{{ name_prefix + '-docs'}}"
-      DNSName: "docs"
+      DNSName: docs
       App: AnsibleWorkshop
     image:
       publisher: "{{ azure_rhel_publisher }}"
@@ -316,9 +315,9 @@
   register: windows_instances
   until: windows_instances.finished
   retries: 300
-  with_items: 
+  with_items:
     - "{{ windows1_jobs.results }}"
-  # - "{{ windows2_jobs.results }}"
+# - "{{ windows2_jobs.results }}"
 
 - name: Workstation | Wait for instance creation to complete
   async_status: jid="{{ item.ansible_job_id }}"
@@ -335,7 +334,7 @@
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
     tenant: "{{ azure_tenant }}"
-    resource_group: "{{ azure_resource_group }}"    
+    resource_group: "{{ azure_resource_group }}"
     name: custom-script
     virtual_machine_name: "{{ item.invocation.module_args.name }}"
     publisher: Microsoft.Compute
@@ -351,7 +350,7 @@
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
     tenant: "{{ azure_tenant }}"
-    resource_group: "{{ azure_resource_group }}"    
+    resource_group: "{{ azure_resource_group }}"
     name: custom-script
     virtual_machine_name: "{{ item.invocation.module_args.name }}"
     publisher: Microsoft.Compute
@@ -360,14 +359,14 @@
     settings: '{"commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File CustomScript.ps1 -ForceNewSSLCert -EnableCredSSP", "fileUris": ["https://raw.githubusercontent.com/mgmt-sa-tiger-team/skylight/master/roles/manage-azure-instances/templates/CustomScript.ps1"]}'
     auto_upgrade_minor_version: true
   with_items: "{{ workstation_instances.results }}"
-  
+
 - name: Windows create VM Extension
   azure_rm_virtualmachine_extension:
     client_id: "{{ azure_client_id }}"
     secret: "{{ azure_secret }}"
     subscription_id: "{{ azure_subscription_id }}"
     tenant: "{{ azure_tenant }}"
-    resource_group: "{{ azure_resource_group }}"    
+    resource_group: "{{ azure_resource_group }}"
     name: custom-script
     virtual_machine_name: "{{ item.invocation.module_args.name }}"
     publisher: Microsoft.Compute
@@ -379,23 +378,25 @@
 
 ################### Add Hosts ###################
 
-- name: Tower | Add new instance to host group  
-  add_host:  
+- name: Tower | Add new instance to host group
+  add_host:
     hostname: "{{ item.invocation.module_args.tags.DNSName }}"
-    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
+      }}"
     ansible_user: "{{ azure_admin_user }}"
-    ansible_password: "{{ azure_admin_pass }}"    
+    ansible_password: "{{ azure_admin_pass }}"
     ansible_become_pass: "{{ azure_admin_pass }}"
     private_ip: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
     student: "{{ item.invocation.module_args.tags.Student | regex_replace('[^0-9]', '') }}"
     tower_license: "{{ tower_license }}"
     groups: tower
-  with_items: "{{ tower_instances.results }}"  
+  with_items: "{{ tower_instances.results }}"
 
-- name: GitLab | Add new instance to host group  
-  add_host:  
+- name: GitLab | Add new instance to host group
+  add_host:
     hostname: "{{ item.invocation.module_args.tags.DNSName }}"
-    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
+      }}"
     ansible_user: "{{ azure_admin_user }}"
     ansible_password: "{{ azure_admin_pass }}"
     ansible_become_pass: "{{ azure_admin_pass }}"
@@ -403,93 +404,97 @@
     groups: gitlab
   with_items: "{{ gitlab_instances.results }}"
 
-- name: Docs | Add new instance to host group  
-  add_host:  
+- name: Docs | Add new instance to host group
+  add_host:
     hostname: "{{ item.invocation.module_args.tags.DNSName }}"
-    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
+      }}"
     ansible_user: "{{ azure_admin_user }}"
     ansible_password: "{{ azure_admin_pass }}"
-    ansible_become_pass: "{{ azure_admin_pass }}" 
+    ansible_become_pass: "{{ azure_admin_pass }}"
     private_ip: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
     groups: docs
-  with_items: "{{ docs_instances.results }}"  
+  with_items: "{{ docs_instances.results }}"
 
 - name: DomainController | Add new instance to host group
   add_host:
     hostname: "{{ item.invocation.module_args.tags.DNSName }}"
-    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
+    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
+      }}"
     ansible_port: 5986
     ansible_user: "{{ azure_admin_user }}"
     ansible_password: "{{ azure_admin_pass }}"
-    ansible_connection: "winrm"
+    ansible_connection: winrm
     private_ip: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
-    ansible_winrm_transport: "credssp"
-    ansible_winrm_server_cert_validation: "ignore"
+    ansible_winrm_transport: credssp
+    ansible_winrm_server_cert_validation: ignore
     groups: windows_domain_controllers
-  with_items: "{{ dc_instances.results }}"      
+  with_items: "{{ dc_instances.results }}"
 
 - name: Windows | Add new instance to host group
   add_host:
     hostname: "{{ item.invocation.module_args.tags.DNSName }}"
-    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
-    private_ip:  "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
+    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
+      }}"
+    private_ip: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
     ansible_port: 5986
     ansible_user: "{{ azure_admin_user }}"
     ansible_password: "{{ azure_admin_pass }}"
-    ansible_connection: "winrm"
-    ansible_winrm_transport: "credssp"
-    ansible_winrm_server_cert_validation: "ignore"
+    ansible_connection: winrm
+    ansible_winrm_transport: credssp
+    ansible_winrm_server_cert_validation: ignore
     student: "{{ item.invocation.module_args.tags.Student | regex_replace('[^0-9]', '') }}"
     groups: windows
-  with_items: "{{ windows_instances.results }}"  
+  with_items: "{{ windows_instances.results }}"
 
 - name: Workstation | Add new instance to host group
   add_host:
     hostname: "{{ item.invocation.module_args.tags.DNSName }}"
-    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress }}"
-    private_ip:  "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
+    ansible_host: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress
+      }}"
+    private_ip: "{{ item.ansible_facts.azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}"
     ansible_port: 5986
     ansible_user: "{{ azure_admin_user }}"
     ansible_password: "{{ azure_admin_pass }}"
     ansible_become_password: "{{ users_password }}"
-    ansible_connection: "winrm"
-    ansible_winrm_transport: "credssp"
-    ansible_winrm_server_cert_validation: "ignore"
+    ansible_connection: winrm
+    ansible_winrm_transport: credssp
+    ansible_winrm_server_cert_validation: ignore
     student: "{{ item.invocation.module_args.tags.Student | regex_replace('[^0-9]', '') }}"
     groups: windows_workstations
-  with_items: "{{ workstation_instances.results }}"  
+  with_items: "{{ workstation_instances.results }}"
 
 ################### Wait for Instances ###################
 
-- name: Tower | Wait for SSH to come up  
-  wait_for_connection:  
+- name: Tower | Wait for SSH to come up
+  wait_for_connection:
   delegate_to: "{{ item }}"
-  with_items: "{{ groups['tower'] }}"  
+  with_items: "{{ groups['tower'] }}"
 
 - name: GitLab | Wait for SSH to come up
   wait_for_connection:
   delegate_to: "{{ item }}"
-  with_items: "{{ groups['gitlab'] }}"  
+  with_items: "{{ groups['gitlab'] }}"
 
 - name: Docs | Wait for SSH to come up
   wait_for_connection:
   delegate_to: "{{ item }}"
-  with_items: "{{ groups['docs'] }}"  
+  with_items: "{{ groups['docs'] }}"
 
 - name: DomainController | Wait for WinRM to come up
   wait_for_connection:
   delegate_to: "{{ item }}"
-  with_items: "{{ groups['windows_domain_controllers'] }}"  
+  with_items: "{{ groups['windows_domain_controllers'] }}"
 
 - name: Windows | Wait for WinRM to come up
   wait_for_connection:
   delegate_to: "{{ item }}"
-  with_items: "{{ groups['windows'] }}" 
+  with_items: "{{ groups['windows'] }}"
 
 - name: Workstation | Wait for WinRM to come up
   wait_for_connection:
   delegate_to: "{{ item }}"
-  with_items: "{{ groups['windows_workstations'] }}" 
+  with_items: "{{ groups['windows_workstations'] }}"
 
 ################### Create Inventories ###################
 
@@ -503,4 +508,3 @@
     src: instances.txt.j2
     dest: "{{ playbook_dir }}/workshops/{{ name_prefix }}/{{ user_prefix }}{{ item }}-instances.txt"
   with_sequence: count="{{ user_count }}"
-

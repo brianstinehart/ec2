@@ -1,18 +1,18 @@
 ---
 - name: Provision Instances
   hosts: localhost
-  gather_facts: False
+  gather_facts: false
   vars_files:
-    - [ 'vars/custom.yml', 'vars/main.yml' ]
+    - [vars/custom.yml, vars/main.yml]
   tags:
     - manage-instances
   vars:
     teardown: false
   tasks:
-  - include_role:
-      name: "check_setup"
-  - include_role:
-      name: "manage-{{ instance_loc }}-instances"
+    - include_role:
+        name: check_setup
+    - include_role:
+        name: manage-{{ instance_loc }}-instances
 
 # - name: Configure Active Directory Domain Controller
 #   hosts: windows_domain_controllers
@@ -72,9 +72,9 @@
 #
 - name: Configure Windows Workstation
   hosts: windows_workstations
-  gather_facts: True
+  gather_facts: true
   vars_files:
-    - [ 'vars/custom.yml', 'vars/main.yml' ]
+    - [vars/custom.yml, vars/main.yml]
   tags:
     - windows-workstation
   roles:

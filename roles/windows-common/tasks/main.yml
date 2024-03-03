@@ -7,7 +7,7 @@
 - name: Join Domain
   win_domain_membership:
     dns_domain_name: "{{ dns_domain_name }}"
-    domain_admin_user: "admin@{{ dns_domain_name }}"
+    domain_admin_user: admin@{{ dns_domain_name }}
     domain_admin_password: "{{ domain_admin_password }}"
     state: domain
   register: windomain
@@ -25,7 +25,7 @@
   win_group_membership:
     name: Administrators
     members:
-     - "{{ dns_domain_name_short }}\\Ansible Users"
+      - "{{ dns_domain_name_short }}\\Ansible Users"
     state: present
 
 - name: Add Ansible group to a local Remote Management Users

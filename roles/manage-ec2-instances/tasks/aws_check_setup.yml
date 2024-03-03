@@ -11,7 +11,7 @@
 
 - name: check for underscores in workshop name
   fail:
-    msg: "Amazon AWS does not allow underscores _ for s3 websites, please see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html"
+    msg: Amazon AWS does not allow underscores _ for s3 websites, please see https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
   when:
     - create_login_page is defined
     - create_login_page

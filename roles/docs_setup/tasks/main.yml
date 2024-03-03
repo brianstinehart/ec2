@@ -1,3 +1,4 @@
+---
 - name: Setup Remi PHP 7 Repo
   yum:
     name: http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
@@ -20,7 +21,7 @@
   service:
     name: "{{ item }}"
     state: started
-    enabled: yes
+    enabled: true
   with_items:
     - mariadb
     - php-fpm
@@ -30,7 +31,7 @@
     path: /var/lib/php/session/
     owner: nginx
     group: nginx
-    mode: 0777
+    mode: "0777"
     state: directory
 
 - name: Install asciidoc packages (RHEL)
