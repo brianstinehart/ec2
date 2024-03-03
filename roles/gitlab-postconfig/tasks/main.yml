@@ -31,7 +31,7 @@
     dest: /root/set_root_pw.sh
     owner: root
     group: root
-    mode: 0700
+    mode: "0700"
 
 - name: GitLab Post | Execute set root password
   command: ./set_root_pw.sh
@@ -54,28 +54,28 @@
 - name: GitLab Post | Create local users
   gitlab_user:
     server_url: https://gitlab.{{ dns_domain_name }}
-    validate_certs: False
+    validate_certs: false
     login_user: root
     login_password: "{{ domain_admin_password }}"
     name: "{{ user_prefix }}{{ item }}"
     username: "{{ user_prefix }}{{ item }}"
     password: "{{ users_password }}"
     email: "{{ user_prefix }}{{ item }}@{{ dns_domain_name }}"
-    confirm: False
+    confirm: false
     state: present
   with_sequence: count="{{ user_count }}"
 
 - name: GitLab Post | Create Projects in GitLab
   gitlab_project:
     server_url: https://gitlab.{{ dns_domain_name }}
-    validate_certs: False
+    validate_certs: false
     login_user: root
     login_password: "{{ domain_admin_password }}"
     name: "{{ user_prefix }}{{ item }}"
     group: "{{ user_prefix }}{{ item }}"
-    issues_enabled: False
-    wiki_enabled: False
-    snippets_enabled: False
+    issues_enabled: false
+    wiki_enabled: false
+    snippets_enabled: false
     state: present
   with_sequence: count="{{ user_count }}"
   ignore_errors: true

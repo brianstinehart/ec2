@@ -12,8 +12,8 @@
 - name: Remove PeerDNS=yes entry
   lineinfile:
     path: "{{ item }}"
-    regexp: '^PEERDNS=yes'
-    line: ''
+    regexp: ^PEERDNS=yes
+    line: ""
   with_items: "{{ eths.stdout_lines }}"
 
 - name: set DNS resolution in ifcfg file
@@ -44,8 +44,8 @@
     name: epel
     description: EPEL for Enterprise Linux 7
     baseurl: https://dl.fedoraproject.org/pub/epel/7/x86_64/
-    enabled: yes
-    gpgcheck: no
+    enabled: true
+    gpgcheck: false
 
 - name: Install packages
   package:
@@ -53,6 +53,3 @@
       - vim
       - bind-utils
     state: present
-
-
-

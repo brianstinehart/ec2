@@ -1,3 +1,4 @@
+---
 # https://github.com/cedrozor/myrtille
 
 - name: Install IIS and .Net 4.5 on Server
@@ -5,9 +6,9 @@
     name:
       - Web-Server
       - NET-Framework-Core
-#      - Application-Server
+      #      - Application-Server
       - Web-Asp-Net45
-    include_management_tools: True
+    include_management_tools: true
     state: present
   when: "'Windows 10' not in ansible_distribution"
 
@@ -42,7 +43,6 @@
     dest: C:\Temp\Myrtille_2.3.1_x86_x64_Setup.exe
   when: not myrtille.stat.exists
 
-
 - name: Extract the binary
   win_command: Myrtille_2.3.1_x86_x64_Setup.exe -o "C:\Temp" -y
   args:
@@ -72,4 +72,3 @@
     application_pool: MyrtilleAppPool
     physical_path: C:\Program Files (x86)\Myrtille\
     state: present
-

@@ -3,22 +3,22 @@
   win_firewall:
     state: disabled
     profiles:
-    - Domain
-    - Private
-    - Public
+      - Domain
+      - Private
+      - Public
     shell: exit 1
     register: task_result
     until: task_result.rc == 0
     retries: 10
     delay: 1
-    ignore_errors: yes
+    ignore_errors: true
 
 - name: Install AD-Domain-Services
   win_feature:
     name: AD-Domain-Services
     state: present
-    include_management_tools: True
-    include_sub_features: True
+    include_management_tools: true
+    include_sub_features: true
   register: winfeature
 
 - name: Reboot if needed
@@ -111,11 +111,11 @@
 
 - name: Add windows domain admin
   win_domain_user:
-    name: "Admin"
-    upn: "Admin@{{ dns_domain_name }}"
+    name: Admin
+    upn: Admin@{{ dns_domain_name }}
     state: present
-    enabled: yes
-    account_locked: no
+    enabled: true
+    account_locked: false
     groups:
       - Domain Admins
     password: "{{ domain_admin_password }}"
@@ -124,15 +124,15 @@
     firstname: admin
     surname: user
     company: AnsibleByRedHat
-    email: "Admin@{{ dns_domain_name }}"
+    email: Admin@{{ dns_domain_name }}
 
 - name: Add windows AD users
   win_domain_user:
     name: "{{ user_prefix }}{{ item }}"
     upn: "{{ user_prefix }}{{ item }}@{{ dns_domain_name }}"
     state: present
-    enabled: yes
-    account_locked: no
+    enabled: true
+    account_locked: false
     groups:
       - Ansible Users
     password: "{{ users_password }}"

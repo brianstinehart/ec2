@@ -5,9 +5,9 @@
     method: GET
     user: admin
     password: "{{ towerpass }}"
-    validate_certs: False
+    validate_certs: false
   register: checkout
-  ignore_errors: True
+  ignore_errors: true
 
 - name: set condtional if the above didn't error
   set_fact:
@@ -18,14 +18,14 @@
   get_url:
     url: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ towerversion }}.tar.gz
     dest: /tmp/ansible-tower-setup-{{ towerversion }}.tar.gz
-    mode: 0640
+    mode: "0640"
   when: towerchk not in towerversion
 
 - name: extract installer
   unarchive:
     src: /tmp/ansible-tower-setup-{{ towerversion }}.tar.gz
     dest: /tmp/
-    remote_src: True
+    remote_src: true
   when: towerchk not in towerversion
 
 - name: template inventory file
@@ -44,8 +44,8 @@
     method: GET
     user: admin
     password: "{{ towerpass }}"
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
   register: check2
   until: check2.json is defined and check2.json.version in towerversion
   retries: 10
@@ -60,9 +60,9 @@
     password: "{{ towerpass }}"
     body: "{{ tower_license }}"
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
-  ignore_errors: True
+    validate_certs: false
+    force_basic_auth: true
+  ignore_errors: true
 
 - name: Add LDAP Config
   uri:
@@ -72,20 +72,20 @@
     password: "{{ towerpass }}"
     body: "{{ lookup('template','ldap_conf.json.j2') }}"
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
 
 - set_fact:
     userid: "{{ inventory_hostname | regex_replace('[^0-9]', '') }}"
 
 - name: Delete demo inventory
   uri:
-    url:  https://localhost/api/v2/inventories/1/
+    url: https://localhost/api/v2/inventories/1/
     method: DELETE
     user: admin
     password: "{{ towerpass }}"
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 201
@@ -98,12 +98,12 @@
 
 - name: Delete demo project
   uri:
-    url:  https://localhost/api/v2/projects/4/
+    url: https://localhost/api/v2/projects/4/
     method: DELETE
     user: admin
     password: "{{ towerpass }}"
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 201
@@ -116,12 +116,12 @@
 
 - name: Delete demo template
   uri:
-    url:  https://localhost/api/v2/job_templates/5/
+    url: https://localhost/api/v2/job_templates/5/
     method: DELETE
     user: admin
     password: "{{ towerpass }}"
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 201
@@ -134,12 +134,12 @@
 
 - name: Delete demo credential
   uri:
-    url:  https://localhost/api/v2/credentials/1/
+    url: https://localhost/api/v2/credentials/1/
     method: DELETE
     user: admin
     password: "{{ towerpass }}"
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 201
@@ -152,14 +152,14 @@
 
 - name: create inventory
   uri:
-    url:  https://localhost/api/v2/inventories/
+    url: https://localhost/api/v2/inventories/
     method: POST
     user: admin
     password: "{{ towerpass }}"
     body: "{{ lookup('file','tower_inventory.json') }}"
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 201
@@ -169,14 +169,14 @@
 
 - name: create group
   uri:
-    url:  https://localhost/api/v2/groups/
+    url: https://localhost/api/v2/groups/
     method: POST
     user: admin
     password: "{{ towerpass }}"
     body: "{{ lookup('template','tower_group.json.j2') }}"
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 201
@@ -186,14 +186,14 @@
 
 - name: create host
   uri:
-    url:  https://localhost/api/v2/hosts/
+    url: https://localhost/api/v2/hosts/
     method: POST
     user: admin
     password: "{{ towerpass }}"
     body: "{{ lookup('template','tower_host.json.j2') }}"
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 201
@@ -203,14 +203,14 @@
 
 - name: Associate host to group
   uri:
-    url:  https://localhost/api/v2/groups/1/hosts/
+    url: https://localhost/api/v2/groups/1/hosts/
     method: POST
     user: admin
     password: "{{ towerpass }}"
     body: '{ "id": 2 }'
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 204
@@ -220,14 +220,14 @@
 
 - name: Add win_shell/win_feature/win_reboot to allowed adhoc modules
   uri:
-    url:  https://localhost/api/v2/settings/all/
+    url: https://localhost/api/v2/settings/all/
     method: PATCH
     user: admin
     password: "{{ towerpass }}"
     body: "{{ lookup('template','tower_config_adhoc.json.j2') }}"
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 204
@@ -237,14 +237,14 @@
 
 - name: Set Base URL of Tower to resolve issues with websocket
   uri:
-    url:  https://localhost/api/v2/settings/system/
+    url: https://localhost/api/v2/settings/system/
     method: PATCH
     user: admin
     password: "{{ towerpass }}"
     body: '{ "TOWER_URL_BASE": "https://s{{ userid }}-tower.{{ dns_domain_name }}" }'
     body_format: json
-    validate_certs: False
-    force_basic_auth: yes
+    validate_certs: false
+    force_basic_auth: true
     status_code:
       - 200
       - 204
@@ -255,8 +255,6 @@
 - name: Disable GIT Cert validation
   lineinfile:
     path: /etc/tower/settings.py
-    regexp: 'GIT_SSL_NO_VERIFY'
-    line: "AWX_TASK_ENV['GIT_SSL_NO_VERIFY'] = 'True'"
+    regexp: GIT_SSL_NO_VERIFY
+    line: AWX_TASK_ENV['GIT_SSL_NO_VERIFY'] = 'True'
   notify: restart tower
-
-

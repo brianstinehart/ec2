@@ -1,5 +1,4 @@
 ---
-
 # ----------------------- Destroy Tower Instances -----------------------
 - name: Destory Tower Instances
   vmware_guest:
@@ -12,7 +11,7 @@
     name: "{{ name_prefix }}-s{{ item }}-tower"
     validate_certs: false
     state: absent
-    force: yes
+    force: true
   with_sequence: count={{ user_count }}
   register: tower_jobs
   async: 7200
@@ -30,7 +29,7 @@
     name: "{{ name_prefix }}-gitlab"
     validate_certs: false
     state: absent
-    force: yes
+    force: true
   register: gitlab_jobs
   async: 7200
   poll: 0
@@ -47,7 +46,7 @@
     name: "{{ name_prefix }}-docs"
     validate_certs: false
     state: absent
-    force: yes
+    force: true
   register: docs_jobs
   async: 7200
   poll: 0
@@ -64,7 +63,7 @@
     name: "{{ name_prefix }}-dc"
     validate_certs: false
     state: absent
-    force: yes
+    force: true
   register: dc_jobs
   async: 7200
   poll: 0
@@ -81,7 +80,7 @@
     name: "{{ name_prefix }}-s{{ item }}-win1"
     validate_certs: false
     state: absent
-    force: yes
+    force: true
   with_sequence: count={{ user_count }}
   register: windows1_jobs
   async: 7200
@@ -99,12 +98,11 @@
     name: "{{ name_prefix }}-s{{ item }}-work"
     validate_certs: false
     state: absent
-    force: yes
+    force: true
   with_sequence: count={{ user_count }}
   register: workstation_jobs
   async: 7200
   poll: 0
-
 
 ###################  Wait for jobs to complete ###################
 

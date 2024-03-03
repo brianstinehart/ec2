@@ -1,3 +1,4 @@
+---
 ################### Build Instances ###################
 # - name: DomainController | Launch Domain Controller Instance
 #   vmware_guest2:
@@ -116,10 +117,10 @@
       memory_mb: 4096
       num_cpus: 2
     networks:
-    - name: "{{ vCenterPortGroup }}"
-      type: dhcp
+      - name: "{{ vCenterPortGroup }}"
+        type: dhcp
     customization:
-      hostname: "s{{ item }}-tower"
+      hostname: s{{ item }}-tower
   with_sequence: count={{ user_count }}
   register: tower_jobs
   async: 7200
